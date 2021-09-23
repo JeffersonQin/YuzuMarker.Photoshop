@@ -48,11 +48,11 @@ CEP 框架是基于 Chrome 的, 其可以包含 HTML / CSS 的内容，且可以
 ```
 Photoshop ⇔ ExtendScript
                  ||
-			 JavaScript
-			     ||
-		   Node, HTTP Server
-		   		 ||
-				....
+             JavaScript
+                 ||
+           Node, HTTP Server
+                 ||
+                ....
 ```
 
 ## HTTP Server API
