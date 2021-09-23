@@ -2,6 +2,8 @@ const port = 4016;
 
 var csInterface = new CSInterface();
 
+var server;
+
 function addLog(url, status, desc, inf) {
 	var logCell = document.createElement('div');
 
@@ -58,11 +60,41 @@ function startServer() {
 			'data': {}
 		}));
 		addLog(req.url, "success", "通信测试", null);
-	})
+	});
 
-	app.get('/')
+	app.get('/openfile', function (req, res) {
 
-	var server = app.listen(port, function () {
+	});
+
+	app.get('/createfile', function (req, res) {
+
+	});
+
+	app.get('/addnewlayerset', function (req, res) {
+
+	});
+
+	app.get('/addnewartlayer', function (req, res) {
+
+	});
+
+	app.get('/removelayerset', function (req, res) {
+
+	});
+
+	app.get('/removeartlayer', function (req, res) {
+
+	});
+
+	app.get('/addtextlayer', function (req, res) {
+
+	});
+
+	app.get('/settextlayer', function (req, res) {
+
+	});
+
+	server = app.listen(port, function () {
 		alert('服务成功启动 http://localhost:' + port)
-	})
+	});
 }
