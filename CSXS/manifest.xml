@@ -34,9 +34,17 @@
 					<Menu>YuzuMarker</Menu>
 						<Geometry>
 							<Size>
-							<Height>500</Height>
-							<Width>350</Width>
+								<Height>600</Height>
+								<Width>400</Width>
 							</Size>
+							<MaxSize>
+								<Height>2000</Height>
+								<Width>2000</Width>
+							</MaxSize>
+							<MinSize>
+								<Height>100</Height>
+								<Width>100</Width>
+							</MinSize>
 						</Geometry>
 					<Icons />
 				</UI>
