@@ -44,8 +44,32 @@ function addLog(url, status, desc, inf) {
 	window.scrollTo(0, document.documentElement.scrollHeight);
 }
 
+function repr(val) {
+	return val.replace(/\\/g, '\\\\').replace(/\'/g, '\\\'').replace(/\"/g, '\\\"').replace(/\n/g, '\\n').replace(/\t/g, '\\t').replace(/\r/g, '\\r').replace(/\&/g, '\\\&');
+}
+
 function clearLog() {
 	document.getElementById('log-panel').innerHTML = '';
+}
+
+function onSuccess(req, res, data, desc) {
+	res.writeHead(200);
+	res.end(JSON.stringify({
+		'status': 'success',
+		'error': '',
+		'data': data
+	}));
+	addLog(req.url, "success", desc, null);
+}
+
+function onFail(req, res, err, desc) {
+	res.writeHead(200);
+	res.end(JSON.stringify({
+		'status': 'failed',
+		'error': err,
+		'data': {}
+	}));
+	addLog(req.url, "error", desc, err);
 }
 
 function startServer() {
@@ -53,44 +77,59 @@ function startServer() {
 	var app = express();
 
 	app.get('/', function (req, res) {
-		res.writeHead(200);
-		res.end(JSON.stringify({
-			'status': 'success',
-			'message': 'Hello World!',
-			'data': {}
-		}));
-		addLog(req.url, "success", "通信测试", null);
+		onSuccess(req, res, {}, '通信测试');
 	});
 
-	app.get('/openfile', function (req, res) {
-
+	app.get('/openFile', function (req, res) {
+		var params = req.query
+		csInterface.evalScript("openFile('" + repr(params['path']) + "')", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '打开文件成功');
+			} else {
+				onFail(req, res, ret, '打开文件失败');
+			}
+		})
 	});
 
-	app.get('/createfile', function (req, res) {
-
-	});
-
-	app.get('/addnewlayerset', function (req, res) {
+	app.get('/createFile', function (req, res) {
 
 	});
 
-	app.get('/addnewartlayer', function (req, res) {
+	app.get('/addlayerset', function (req, res) {
+		var params = req.query
+		csInterface.evalScript("addLayerSet('" + repr(params['layerSetName']) + "')", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '增加图层组成功: ' + params['layerSetName']);
+			} else {
+				onFail(req, res, ret, '增加图层组失败');
+			}
+		})
+	});
+
+	app.get('/addArtLayer', function (req, res) {
 
 	});
 
-	app.get('/removelayerset', function (req, res) {
+	app.get('/removeLayerSet', function (req, res) {
+		var params = req.query
+		csInterface.evalScript("removeLayerSet('" + repr(params['layerSetName']) + "')", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '移除图层组成功: ' + params['layerSetName']);
+			} else {
+				onFail(req, res, ret, '移除图层组失败');
+			}
+		})
+	});
+
+	app.get('/removeArtLayer', function (req, res) {
 
 	});
 
-	app.get('/removeartlayer', function (req, res) {
+	app.get('/addTextLayer', function (req, res) {
 
 	});
 
-	app.get('/addtextlayer', function (req, res) {
-
-	});
-
-	app.get('/settextlayer', function (req, res) {
+	app.get('/setTextLayer', function (req, res) {
 
 	});
 
