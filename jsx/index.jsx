@@ -12,6 +12,26 @@ function openFile(path) {
 	}
 }
 
+function existLayerSet(layerSetName) {
+	try {
+		var ref = app.activeDocument.layerSets.getByName(layerSetName);
+		if (ref == null) return 'false';
+		return 'true';
+	} catch (err) {
+		return 'false';
+	}
+}
+
+function existArtLayer(layerSetName, artLayerName) {
+	try {
+		var ref = app.activeDocument.layerSets.getByName(layerSetName).artLayers.getByName(artLayerName);
+		if (ref == null) return 'false';
+		return 'true';
+	} catch (err) {
+		return 'false';
+	}
+}
+
 function addLayerSet(layerSetName) {
 	try {
 		var newLayerSetRef = app.activeDocument.layerSets.add();

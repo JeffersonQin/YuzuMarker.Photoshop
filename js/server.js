@@ -80,6 +80,28 @@ function startServer() {
 		onSuccess(req, res, {}, '通信测试');
 	});
 
+	app.get('/existLayerSet', function (req, res) {
+		var params = req.query;
+		csInterface.evalScript("existLayerSet('" + repr(params['layerSetName']) + "')", (ret) => {
+			if (ret == 'true') {
+				onSuccess(req, res, {'exist': true}, '图层组存在: ' + params['layerSetName']);
+			} else {
+				onSuccess(req, res, {'exist': false}, '图层组不存在: ' + params['layerSetName']);
+			}
+		});
+	});
+
+	app.get('/existArtLayer', function (req, res) {
+		var params = req.query;
+		csInterface.evalScript("existArtLayer('" + repr(params['layerSetName']) + "', '" + repr(params['artLayerName']) + "')", (ret) => {
+			if (ret == 'true') {
+				onSuccess(req, res, {'exist': true}, '图层存在: ' + params['layerSetName'] + '/' + params['artLayerName']);
+			} else {
+				onSuccess(req, res, {'exist': false}, '图层不存在: ' + params['layerSetName'] + '/' + params['artLayerName']);
+			}
+		});
+	});
+
 	app.get('/openFile', function (req, res) {
 		var params = req.query;
 		csInterface.evalScript("openFile('" + repr(params['path']) + "')", (ret) => {
