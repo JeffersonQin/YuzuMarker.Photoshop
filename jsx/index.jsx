@@ -22,11 +22,50 @@ function addLayerSet(layerSetName) {
 	}
 }
 
+function addArtLayer(layerSetName, artLayerName) {
+	try {
+		var newArtLayerRef = app.activeDocument.layerSets.getByName(layerSetName).artLayers.add();
+		newArtLayerRef.name = artLayerName;
+		return 'success'
+	} catch (err) {
+		return err.description
+	}
+}
+
 function removeLayerSet(layerSetName) {
 	try {
 		app.activeDocument.layerSets.getByName(layerSetName).remove();
 		return 'success';
 	} catch (err) {
 		return err.description;
+	}
+}
+
+function removeArtLayer(layerSetName, artLayerName) {
+	try {
+		app.activeDocument.layerSets.getByName(layerSetName).artLayers.getByName(artLayerName).remove();
+		return 'success'
+	} catch (err) {
+		return err.description;
+	}
+}
+
+function addTextLayer(layerSetName, artLayerName) {
+	try {
+		var newArtLayerRef = app.activeDocument.layerSets.getByName(layerSetName).artLayers.add();
+		newArtLayerRef.name = artLayerName;
+		newArtLayerRef.kind = LayerKind.TEXT;
+		return 'success'
+	} catch (err) {
+		return err.description
+	}
+}
+
+function setTextLayer(layerSetName, artLayerName) {
+	try {
+		app.activeDocument.layerSets.getByName(layerSetName).artLayers.getByName(artLayerName).kind = LayerKind.TEXT;
+		return 'success'
+	} catch (err) {
+		return err.description
 	}
 }

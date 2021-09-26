@@ -81,14 +81,14 @@ function startServer() {
 	});
 
 	app.get('/openFile', function (req, res) {
-		var params = req.query
+		var params = req.query;
 		csInterface.evalScript("openFile('" + repr(params['path']) + "')", (ret) => {
 			if (ret == 'success') {
 				onSuccess(req, res, {}, '打开文件成功');
 			} else {
 				onFail(req, res, ret, '打开文件失败');
 			}
-		})
+		});
 	});
 
 	app.get('/createFile', function (req, res) {
@@ -96,44 +96,72 @@ function startServer() {
 	});
 
 	app.get('/addlayerset', function (req, res) {
-		var params = req.query
+		var params = req.query;
 		csInterface.evalScript("addLayerSet('" + repr(params['layerSetName']) + "')", (ret) => {
 			if (ret == 'success') {
 				onSuccess(req, res, {}, '增加图层组成功: ' + params['layerSetName']);
 			} else {
 				onFail(req, res, ret, '增加图层组失败');
 			}
-		})
+		});
 	});
 
 	app.get('/addArtLayer', function (req, res) {
-
+		var params = req.query;
+		csInterface.evalScript("addArtLayer('" + repr(params['layerSetName']) + "', '" + repr(params['artLayerName']) + "')", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '增加图层成功: ' + params['layerSetName'] + '/' + params['artLayerName']);
+			} else {
+				onFail(req, res, ret, '增加图层失败');
+			}
+		});
 	});
 
 	app.get('/removeLayerSet', function (req, res) {
-		var params = req.query
+		var params = req.query;
 		csInterface.evalScript("removeLayerSet('" + repr(params['layerSetName']) + "')", (ret) => {
 			if (ret == 'success') {
 				onSuccess(req, res, {}, '移除图层组成功: ' + params['layerSetName']);
 			} else {
 				onFail(req, res, ret, '移除图层组失败');
 			}
-		})
+		});
 	});
 
 	app.get('/removeArtLayer', function (req, res) {
-
+		var params = req.query;
+		csInterface.evalScript("removeArtLayer('" + repr(params['layerSetName']) + "', '" + repr(params['artLayerName']) + "')", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '移除图层成功: ' + params['layerSetName'] + '/' + params['artLayerName']);
+			} else {
+				onFail(req, res, ret, '移除图层失败');
+			}
+		});
 	});
 
 	app.get('/addTextLayer', function (req, res) {
-
+		var params = req.query;
+		csInterface.evalScript("addTextLayer('" + repr(params['layerSetName']) + "', '" + repr(params['artLayerName']) + "')", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '增加文字图层成功: ' + params['layerSetName'] + '/' + params['artLayerName']);
+			} else {
+				onFail(req, res, ret, '增加文字图层失败');
+			}
+		});
 	});
 
 	app.get('/setTextLayer', function (req, res) {
-
+		var params = req.query;
+		csInterface.evalScript("setTextLayer('" + repr(params['layerSetName']) + "', '" + repr(params['artLayerName']) + "')", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '设置文字图层成功: ' + params['layerSetName'] + '/' + params['artLayerName']);
+			} else {
+				onFail(req, res, ret, '设置文字图层失败');
+			}
+		});
 	});
 
 	server = app.listen(port, function () {
-		alert('服务成功启动 http://localhost:' + port)
+		alert('服务成功启动 http://localhost:' + port);
 	});
 }
