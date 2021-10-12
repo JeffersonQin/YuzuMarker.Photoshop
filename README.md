@@ -57,6 +57,12 @@ Photoshop ⇔ ExtendScript
                 ....
 ```
 
+## 关于与 Photoshop 的交互
+
+* Adobe CEP 框架，参考：https://github.com/Adobe-CEP/Getting-Started-guides
+* 关于 Photoshop 本身的 API，参考：https://github.com/Adobe-CEP/CEP-Resources
+* 此外，使用[xtools](http://ps-scripts.sourceforge.net/xtools.html)将 Photoshop 的 Actions 转化为 Javascript。注意：我们并未直接使用项目，所以与 LGPL v2.1 协议并不相悖。
+
 ## HTTP Server API
 
 * 默认端口：4016
@@ -69,3 +75,4 @@ TODO
 * https://github.com/Adobe-CEP/CEP-Resources
 * https://github.com/ExtendScript/wiki
 * https://wttech.blog/blog/2020/creating-custom-extension-for-adobe-photoshop/
+* http://ps-scripts.sourceforge.net/xtools.html
