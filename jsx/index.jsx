@@ -1,3 +1,7 @@
+/*
+ * [Deprecated] Old API Section Start
+ */
+
 function createFile() {
 	// TODO
 }
@@ -89,3 +93,7 @@ function setTextLayer(layerSetName, artLayerName) {
 		return err.description
 	}
 }
+
+/*
+ * [Deprecated] Old API Section End
+ */
