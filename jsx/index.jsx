@@ -97,3 +97,117 @@ function setTextLayer(layerSetName, artLayerName) {
 /*
  * [Deprecated] Old API Section End
  */
+
+
+/*
+ * private helping function Section Start
+ */
+
+function getArtLayerInLayerSet(layerSet, artLayerName) {
+	try {
+		return layerSet.artLayers.getByName(artLayerName);
+	} catch (e) {
+		return null;
+	}
+}
+
+function getLayerSetInLayerSet(layerSet, layerSetName) {
+	try {
+		return layerSet.layerSets.getByName(layerSetName);
+	} catch (e) {
+		return null;
+	}
+}
+
+function createArtLayerInLayerSet(layerSet, artLayerName) {
+	var newArtLayerRef = layerSet.artLayers.add();
+	newArtLayerRef.name = artLayerName;
+	return newArtLayerRef;
+}
+
+function createLayerSetInLayerSet(layerSet, layerSetName) {
+	var newLayerSetRef = layerSet.layerSets.add();
+	newLayerSetRef.name = layerSetName;
+	return newLayerSetRef; 
+}
+
+/*
+ * private helping functions Section End
+ */
+
+
+/*
+ * public API Section Start
+ */
+
+function existArtLayerURI(artLayerPath) {
+	try {
+		var pathArr = artLayerPath.split('/');
+		var nowObject = app.activeDocument;
+		for (var i = 0; i < pathArr.length - 1; i ++) {
+			nowObject = getLayerSetInLayerSet(nowObject, pathArr[i]);
+			if (nowObject == null) return 'false';
+		}
+		nowObject = getArtLayerInLayerSet(nowObject, pathArr[pathArr.length - 1]);
+		if (nowObject == null) return 'false';
+		return 'true';
+	} catch (err) {
+		return 'false';
+	}
+}
+
+function existLayerSetURI(layerSetPath) {
+	try {
+		var pathArr = layerSetPath.split('/');
+		var nowObject = app.activeDocument;
+		for (var i = 0; i < pathArr.length; i ++) {
+			nowObject = getLayerSetInLayerSet(nowObject, pathArr[i]);
+			if (nowObject == null) return 'false';
+		}
+		return 'true';
+	} catch (err) {
+		return 'false';
+	}
+}
+
+function createArtLayerIfNotExistByURI(artLayerPath) {
+	try {
+		var pathArr = artLayerPath.split('/');
+		var nowObject = app.activeDocument;
+		for (var i = 0; i < pathArr.length - 1; i ++) {
+			var nextObject = getLayerSetInLayerSet(nowObject, pathArr[i]);
+			if (nextObject == null) {
+				nextObject = createLayerSetInLayerSet(nowObject, pathArr[i]);
+			}
+			nowObject = nextObject;
+		}
+		if (getArtLayerInLayerSet(nowObject, pathArr[pathArr.length - 1]) == null) {
+			createArtLayerInLayerSet(nowObject, pathArr[pathArr.length - 1]);
+		}
+		return 'success';
+	} catch (err) {
+		return err.description;
+	}
+}
+
+// Note: please check existence before create
+function createLayerSetIfNotExistByURI(layerSetPath) {
+	try {
+		var pathArr = layerSetPath.split('/');
+		var nowObject = app.activeDocument;
+		for (var i = 0; i < pathArr.length; i ++) {
+			var nextObject = getLayerSetInLayerSet(nowObject, pathArr[i]);
+			if (nextObject == null) {
+				nextObject = createLayerSetInLayerSet(nowObject, pathArr[i]);
+			}
+			nowObject = nextObject;
+		}
+		return 'success';
+	} catch (err) {
+		return err.description;
+	}
+}
+
+/*
+ * public API Section End
+ */

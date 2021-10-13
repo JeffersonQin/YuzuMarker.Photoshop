@@ -80,6 +80,10 @@ function startServer() {
 		onSuccess(req, res, {}, '通信测试');
 	});
 
+	/*
+	* [Deprecated] Old API Section Start
+	*/
+
 	app.get('/existLayerSet', function (req, res) {
 		var params = req.query;
 		csInterface.evalScript("existLayerSet('" + repr(params['layerSetName']) + "')", (ret) => {
@@ -179,6 +183,54 @@ function startServer() {
 				onSuccess(req, res, {}, '设置文字图层成功: ' + params['layerSetName'] + '/' + params['artLayerName']);
 			} else {
 				onFail(req, res, ret, '设置文字图层失败');
+			}
+		});
+	});
+
+	/*
+	* [Deprecated] Old API Section End
+	*/
+
+	app.get('/existArtLayerURI', function (req, res) {
+		var params = req.query;
+		csInterface.evalScript("existArtLayerURI('" + repr(params['artLayerPath']) + "')", (ret) => {
+			if (ret == 'true') {
+				onSuccess(req, res, {'exist': true}, '图层存在: ' + params['artLayerPath']);
+			} else {
+				onSuccess(req, res, {'exist': false}, '图层不存在: ' + params['artLayerPath']);
+			}
+		});
+	});
+
+	app.get('/existLayerSetURI', function (req, res) {
+		var params = req.query;
+		csInterface.evalScript("existLayerSetURI('" + repr(params['layerSetPath']) + "')", (ret) => {
+			if (ret == 'true') {
+				onSuccess(req, res, {'exist': true}, '图层组存在: ' + params['layerSetPath']);
+			} else {
+				onSuccess(req, res, {'exist': false}, '图层组不存在: ' + params['layerSetPath']);
+			}
+		});
+	});
+
+	app.get('/createArtLayerIfNotExistByURI', function (req, res) {
+		var params = req.query;
+		csInterface.evalScript("createArtLayerIfNotExistByURI('" + repr(params['artLayerPath']) + "')", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '增加图层成功: ' + params['artLayerPath']);
+			} else {
+				onFail(req, res, ret, '增加图层失败');
+			}
+		});
+	});
+
+	app.get('/createLayerSetIfNotExistByURI', function (req, res) {
+		var params = req.query;
+		csInterface.evalScript("createLayerSetIfNotExistByURI('" + repr(params['layerSetPath']) + "')", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '增加图层组成功: ' + params['layerSetPath']);
+			} else {
+				onFail(req, res, ret, '增加图层组失败');
 			}
 		});
 	});
