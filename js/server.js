@@ -106,17 +106,6 @@ function startServer() {
 		});
 	});
 
-	app.get('/openFile', function (req, res) {
-		var params = req.query;
-		csInterface.evalScript("openFile('" + repr(params['path']) + "')", (ret) => {
-			if (ret == 'success') {
-				onSuccess(req, res, {}, '打开文件成功');
-			} else {
-				onFail(req, res, ret, '打开文件失败');
-			}
-		});
-	});
-
 	app.get('/createFile', function (req, res) {
 
 	});
@@ -231,6 +220,17 @@ function startServer() {
 				onSuccess(req, res, {}, '增加图层组成功: ' + params['layerSetPath']);
 			} else {
 				onFail(req, res, ret, '增加图层组失败');
+			}
+		});
+	});
+	
+	app.get('/openFile', function (req, res) {
+		var params = req.query;
+		csInterface.evalScript("openFile('" + repr(params['path']) + "')", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '打开文件成功');
+			} else {
+				onFail(req, res, ret, '打开文件失败');
 			}
 		});
 	});

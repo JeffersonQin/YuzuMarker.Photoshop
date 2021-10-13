@@ -6,16 +6,6 @@ function createFile() {
 	// TODO
 }
 
-function openFile(path) {
-	try {
-		var fileRef = new File(path);
-		app.open(fileRef);
-		return 'success';
-	} catch (err) {
-		return err.description;
-	}
-}
-
 function existLayerSet(layerSetName) {
 	try {
 		var ref = app.activeDocument.layerSets.getByName(layerSetName);
@@ -202,6 +192,16 @@ function createLayerSetIfNotExistByURI(layerSetPath) {
 			}
 			nowObject = nextObject;
 		}
+		return 'success';
+	} catch (err) {
+		return err.description;
+	}
+}
+
+function openFile(path) {
+	try {
+		var fileRef = new File(path);
+		app.open(fileRef);
 		return 'success';
 	} catch (err) {
 		return err.description;
