@@ -180,7 +180,6 @@ function createArtLayerIfNotExistByURI(artLayerPath) {
 	}
 }
 
-// Note: please check existence before create
 function createLayerSetIfNotExistByURI(layerSetPath) {
 	try {
 		var pathArr = layerSetPath.split('/');
