@@ -207,6 +207,21 @@ function openFile(path) {
 	}
 }
 
+function saveFileAs(path) {
+	try {
+		var photoshopSaveOptions = new PhotoshopSaveOptions();
+		photoshopSaveOptions.alphaChannels = true;
+		photoshopSaveOptions.annotations = true;
+		photoshopSaveOptions.embedColorProfile = true;
+		photoshopSaveOptions.layers = true;
+		photoshopSaveOptions.spotColors = true;
+		app.activeDocument.saveAs(new File(path), photoshopSaveOptions, false, Extension.LOWERCASE);
+		return 'success';
+	} catch (err) {
+		return err.description;
+	}
+}
+
 /*
  * public API Section End
  */

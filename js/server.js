@@ -208,7 +208,7 @@ function startServer() {
 			if (ret == 'success') {
 				onSuccess(req, res, {}, '增加图层成功: ' + params['artLayerPath']);
 			} else {
-				onFail(req, res, ret, '增加图层失败');
+				onFail(req, res, ret, '增加图层失败: ' + params['artLayerPath']);
 			}
 		});
 	});
@@ -219,18 +219,29 @@ function startServer() {
 			if (ret == 'success') {
 				onSuccess(req, res, {}, '增加图层组成功: ' + params['layerSetPath']);
 			} else {
-				onFail(req, res, ret, '增加图层组失败');
+				onFail(req, res, ret, '增加图层组失败: ' + params['layerSetPath']);
 			}
 		});
 	});
-	
+
 	app.get('/openFile', function (req, res) {
 		var params = req.query;
 		csInterface.evalScript("openFile('" + repr(params['path']) + "')", (ret) => {
 			if (ret == 'success') {
-				onSuccess(req, res, {}, '打开文件成功');
+				onSuccess(req, res, {}, '打开文件成功: ' + params['path']);
 			} else {
-				onFail(req, res, ret, '打开文件失败');
+				onFail(req, res, ret, '打开文件失败: ' + params['path']);
+			}
+		});
+	});
+
+	app.get('/saveFileAs', function (req, res) {
+		var params = req.query;
+		csInterface.evalScript("saveFileAs('" + repr(params['path']) + "')", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '另存为文件成功: ' + params['path']);
+			} else {
+				onFail(req, res, ret, '另存为文件失败: ' + params['path']);
 			}
 		});
 	});
