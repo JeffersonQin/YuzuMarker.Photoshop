@@ -57,6 +57,10 @@ Photoshop ⇔ ExtendScript
                 ....
 ```
 
+<div align="center">
+	<img src="./imgs/architecture.png" width=400>
+</div>
+
 ## 关于与 Photoshop 的交互
 
 * Adobe CEP 框架，参考：https://github.com/Adobe-CEP/Getting-Started-guides
