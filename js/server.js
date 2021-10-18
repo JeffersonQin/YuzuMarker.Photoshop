@@ -246,6 +246,16 @@ function startServer() {
 		});
 	});
 
+	app.get('/applyMask', function (req, res) {
+		csInterface.evalScript("applyMask()", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '生成蒙版成功');
+			} else {
+				onFail(req, res, ret, '生成蒙版失败');
+			}
+		});
+	});
+
 	server = app.listen(port, function () {
 		alert('服务成功启动 http://localhost:' + port);
 	});
