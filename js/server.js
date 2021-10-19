@@ -256,6 +256,17 @@ function startServer() {
 		});
 	});
 
+	app.get('/performSelection', function (req, res) {
+		var params = req.query;
+		csInterface.evalScript("performSelection('" + repr(params['points']) + "')", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '区域选择成功');
+			} else {
+				onFail(req, res, ret, '区域选择失败');
+			}
+		});
+	});
+
 	server = app.listen(port, function () {
 		alert('服务成功启动 http://localhost:' + port);
 	});
