@@ -277,6 +277,16 @@ function startServer() {
 		});
 	});
 
+	app.get('/performChannelSelection', function (req, res) {
+		csInterface.evalScript("performChannelSelection()", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '选择当前通道成功');
+			} else {
+				onFail(req, res, ret, '选择当前通道失败');
+			}
+		});
+	});
+
 	server = app.listen(port, function () {
 		alert('服务成功启动 http://localhost:' + port);
 	});

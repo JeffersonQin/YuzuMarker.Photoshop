@@ -834,6 +834,28 @@ function performRasterization() {
 	}
 }
 
+function performChannelSelection() {
+	function step1(enabled, withDialog) {
+		if (enabled != undefined && !enabled)
+			return;
+		var dialogMode = (withDialog ? DialogModes.ALL : DialogModes.NO);
+		var desc1 = new ActionDescriptor();
+		var ref1 = new ActionReference();
+		ref1.putProperty(cTID('Chnl'), sTID("selection"));
+		desc1.putReference(cTID('null'), ref1);
+		var ref2 = new ActionReference();
+		ref2.putEnumerated(cTID('Chnl'), cTID('Ordn'), cTID('Trgt'));
+		desc1.putReference(cTID('T   '), ref2);
+		executeAction(sTID('set'), desc1, dialogMode);
+	};
+	try {
+		step1();
+		return 'success';
+	} catch (err) {
+		return err.description;
+	}
+}
+
 /*
  * public API Section End
  */
