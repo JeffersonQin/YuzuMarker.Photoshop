@@ -814,6 +814,26 @@ function performSelection(points) {
 	}
 }
 
+function performRasterization() {
+	function step1(enabled, withDialog) {
+		if (enabled != undefined && !enabled)
+		return;
+		var dialogMode = (withDialog ? DialogModes.ALL : DialogModes.NO);
+		var desc1 = new ActionDescriptor();
+		var ref1 = new ActionReference();
+		ref1.putEnumerated(cTID('Lyr '), cTID('Ordn'), cTID('Trgt'));
+		desc1.putReference(cTID('null'), ref1);
+		executeAction(sTID('rasterizeLayer'), desc1, dialogMode);
+	};
+	try {
+		step1();
+		return 'success';
+	} catch (err) 
+	{
+		return err.description;
+	}
+}
+
 /*
  * public API Section End
  */

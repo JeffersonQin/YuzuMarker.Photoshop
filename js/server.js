@@ -267,6 +267,16 @@ function startServer() {
 		});
 	});
 
+	app.get('/performRasterization', function (req, res) {
+		csInterface.evalScript("performRasterization()", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '栅格化当前图层成功');
+			} else {
+				onFail(req, res, ret, '栅格化当前图层失败');
+			}
+		});
+	});
+
 	server = app.listen(port, function () {
 		alert('服务成功启动 http://localhost:' + port);
 	});
