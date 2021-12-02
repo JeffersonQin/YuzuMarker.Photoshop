@@ -757,6 +757,15 @@ function saveFileAs(path) {
 	}
 }
 
+function renameBackgroundTo(newName) {
+	try {
+		app.activeDocument.artLayers[0].name = newName;
+		return 'success';
+	} catch (err) {
+		return err.description;
+	}
+}
+
 // xtool generated functions
 
 cTID = function(s) { return app.charIDToTypeID(s); };

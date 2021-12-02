@@ -287,6 +287,18 @@ function startServer() {
 		});
 	});
 
+	app.get('/renameBackgroundTo', function (req, res) {
+		var params = req.query;
+		csInterface.evalScript("renameBackgroundTo('" + repr(params['newName']) + "')", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '重命名背景图层成功');
+			} else {
+				onFail(req, res, ret, '重命名背景图层失败');
+			}
+		});
+	});
+
+
 	server = app.listen(port, function () {
 		alert('服务成功启动 http://localhost:' + port);
 	});
