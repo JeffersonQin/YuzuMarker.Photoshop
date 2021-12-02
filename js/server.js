@@ -298,6 +298,49 @@ function startServer() {
 		});
 	});
 
+	app.get('/deleteArtLayerByURI', function (req, res) {
+		var params = req.query;
+		csInterface.evalScript("deleteArtLayerByURI('" + repr(params['artLayerPath']) + "')", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '删除图层成功: ' + params['artLayerPath']);
+			} else {
+				onFail(req, res, ret, '删除图层失败: ' + params['artLayerPath']);
+			}
+		});
+	});
+
+	app.get('/deleteLayerSetByURI', function (req, res) {
+		var params = req.query;
+		csInterface.evalScript("deleteLayerSetByURI('" + repr(params['layerSetPath']) + "')", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '删除图层组成功: ' + params['layerSetPath']);
+			} else {
+				onFail(req, res, ret, '删除图层组失败: ' + params['layerSetPath']);
+			}
+		});
+	});
+
+	app.get('/selectArtLayerByURI', function (req, res) {
+		var params = req.query;
+		csInterface.evalScript("selectArtLayerByURI('" + repr(params['artLayerPath']) + "')", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '选择图层成功: ' + params['artLayerPath']);
+			} else {
+				onFail(req, res, ret, '选择图层失败: ' + params['artLayerPath']);
+			}
+		});
+	});
+
+	app.get('/selectLayerSetByURI', function (req, res) {
+		var params = req.query;
+		csInterface.evalScript("selectLayerSetByURI('" + repr(params['layerSetPath']) + "')", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '选择图层组成功: ' + params['layerSetPath']);
+			} else {
+				onFail(req, res, ret, '选择图层组失败: ' + params['layerSetPath']);
+			}
+		});
+	});
 
 	server = app.listen(port, function () {
 		alert('服务成功启动 http://localhost:' + port);

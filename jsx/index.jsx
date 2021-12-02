@@ -766,6 +766,62 @@ function renameBackgroundTo(newName) {
 	}
 }
 
+function deleteArtLayerByURI(artLayerPath) {
+	try {
+		var pathArr = artLayerPath.split('/');
+		var nowObject = app.activeDocument;
+		for (var i = 0; i < pathArr.length - 1; i ++) {
+			nowObject = getLayerSetInLayerSet(nowObject, pathArr[i]);
+		}
+		getArtLayerInLayerSet(nowObject, pathArr[pathArr.length - 1]).remove();
+		return 'success';
+	} catch (err) {
+		return err.description;
+	}
+}
+
+function deleteLayerSetByURI(layerSetPath) {
+	try {
+		var pathArr = layerSetPath.split('/');
+		var nowObject = app.activeDocument;
+		for (var i = 0; i < pathArr.length; i ++) {
+			nowObject = getLayerSetInLayerSet(nowObject, pathArr[i]);
+		}
+		nowObject.remove();
+		return 'success';
+	} catch (err) {
+		return err.description;
+	}
+}
+
+function selectArtLayerByURI(artLayerPath) {
+	try {
+		var pathArr = artLayerPath.split('/');
+		var nowObject = app.activeDocument;
+		for (var i = 0; i < pathArr.length - 1; i ++) {
+			nowObject = getLayerSetInLayerSet(nowObject, pathArr[i]);
+		}
+		app.activeDocument.activeLayer = getArtLayerInLayerSet(nowObject, pathArr[pathArr.length - 1]);
+		return 'success';
+	} catch (err) {
+		return err.description;
+	}
+}
+
+function selectLayerSetByURI(layerSetPath) {
+	try {
+		var pathArr = layerSetPath.split('/');
+		var nowObject = app.activeDocument;
+		for (var i = 0; i < pathArr.length; i ++) {
+			nowObject = getLayerSetInLayerSet(nowObject, pathArr[i]);
+		}
+		app.activeDocument.activeLayer = nowObject;
+		return 'success';
+	} catch (err) {
+		return err.description;
+	}
+}
+
 // xtool generated functions
 
 cTID = function(s) { return app.charIDToTypeID(s); };
