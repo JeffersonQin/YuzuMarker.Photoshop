@@ -921,6 +921,25 @@ function performChannelSelection() {
 	}
 }
 
+function importImage(fileName) {
+	function step1(fileName) {
+		var desc554 = new ActionDescriptor();
+		desc554.putPath(cTID('null'), new File(fileName));
+		desc554.putEnumerated(cTID('FTcs'), cTID('QCSt'), cTID('Qcsa'));
+		var desc555 = new ActionDescriptor();
+		desc555.putUnitDouble(cTID('Hrzn'), cTID('#Pxl'), 0.000000);
+		desc555.putUnitDouble(cTID('Vrtc'), cTID('#Pxl'), 0.000000);
+		desc554.putObject(cTID('Ofst'), cTID('Ofst'), desc555);
+		executeAction(cTID('Plc '), desc554, DialogModes.NO);
+	};
+	try {
+		step1(fileName);
+		return 'success';
+	} catch (err) {
+		return err.description;
+	}
+}
+
 /*
  * public API Section End
  */
