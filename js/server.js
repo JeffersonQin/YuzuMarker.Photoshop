@@ -342,6 +342,38 @@ function startServer() {
 		});
 	});
 
+	app.get('/importImage', function (req, res) {
+		var params = req.query;
+		csInterface.evalScript("importImage('" + repr(params['fileName']) + "')", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '导入图片成功: ' + params['fileName']);
+			} else {
+				onFail(req, res, ret, '导入图片失败: ' + params['fileName']);
+			}
+		});
+	});
+
+	app.get('/duplicateAndSelectArtLayerByURI', function (req, res) {
+		var params = req.query;
+		csInterface.evalScript("duplicateAndSelectArtLayerByURI('" + repr(params['sourcePath']) + "', '" + repr(params['targetDir']) + "', '" + repr(params['targetName']) + "')", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '复制并选择图层成功: \n' + params['sourcePath'] + " => " + params['targetDir'] + '/' + params['targetName']);
+			} else {
+				onFail(req, res, ret, '复制并选择图层失败: ' + params['sourcePath'] + " => " + params['targetDir'] + '/' + params['targetName']);
+			}
+		});
+	});
+
+	app.get('/performRgbChannelSelection', function (req, res) {
+		csInterface.evalScript("performRgbChannelSelection()", (ret) => {
+			if (ret == 'success') {
+				onSuccess(req, res, {}, '选择RGB通道成功');
+			} else {
+				onFail(req, res, ret, '选择RGB通道失败');
+			}
+		});
+	});
+
 	server = app.listen(port, function () {
 		alert('服务成功启动 http://localhost:' + port);
 	});
