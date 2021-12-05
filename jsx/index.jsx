@@ -656,6 +656,37 @@ function createLayerSetInLayerSet(layerSet, layerSetName) {
 	return newLayerSetRef; 
 }
 
+function getAndCreateArtLayerIfNotExistByURI(artLayerPath) {
+	var pathArr = artLayerPath.split('/');
+	var nowObject = app.activeDocument;
+	for (var i = 0; i < pathArr.length - 1; i ++) {
+		var nextObject = getLayerSetInLayerSet(nowObject, pathArr[i]);
+		if (nextObject == null) {
+			nextObject = createLayerSetInLayerSet(nowObject, pathArr[i]);
+		}
+		nowObject = nextObject;
+	}
+	if (getArtLayerInLayerSet(nowObject, pathArr[pathArr.length - 1]) == null) {
+		return createArtLayerInLayerSet(nowObject, pathArr[pathArr.length - 1]);
+	}
+	return getArtLayerInLayerSet(nowObject, pathArr[pathArr.length - 1]);
+}
+
+function getAndCreateLayerSetIfNotExistByURI(layerSetPath) {
+	if (layerSetPath == '')
+		return app.activeDocument.activeLayer;
+	var pathArr = layerSetPath.split('/');
+	var nowObject = app.activeDocument;
+	for (var i = 0; i < pathArr.length; i ++) {
+		var nextObject = getLayerSetInLayerSet(nowObject, pathArr[i]);
+		if (nextObject == null) {
+			nextObject = createLayerSetInLayerSet(nowObject, pathArr[i]);
+		}
+		nowObject = nextObject;
+	}
+	return nowObject;
+}
+
 /*
  * private helping functions Section End
  */
@@ -697,18 +728,7 @@ function existLayerSetURI(layerSetPath) {
 
 function createArtLayerIfNotExistByURI(artLayerPath) {
 	try {
-		var pathArr = artLayerPath.split('/');
-		var nowObject = app.activeDocument;
-		for (var i = 0; i < pathArr.length - 1; i ++) {
-			var nextObject = getLayerSetInLayerSet(nowObject, pathArr[i]);
-			if (nextObject == null) {
-				nextObject = createLayerSetInLayerSet(nowObject, pathArr[i]);
-			}
-			nowObject = nextObject;
-		}
-		if (getArtLayerInLayerSet(nowObject, pathArr[pathArr.length - 1]) == null) {
-			createArtLayerInLayerSet(nowObject, pathArr[pathArr.length - 1]);
-		}
+		getAndCreateArtLayerIfNotExistByURI(artLayerPath);
 		return 'success';
 	} catch (err) {
 		return err.description;
@@ -717,15 +737,7 @@ function createArtLayerIfNotExistByURI(artLayerPath) {
 
 function createLayerSetIfNotExistByURI(layerSetPath) {
 	try {
-		var pathArr = layerSetPath.split('/');
-		var nowObject = app.activeDocument;
-		for (var i = 0; i < pathArr.length; i ++) {
-			var nextObject = getLayerSetInLayerSet(nowObject, pathArr[i]);
-			if (nextObject == null) {
-				nextObject = createLayerSetInLayerSet(nowObject, pathArr[i]);
-			}
-			nowObject = nextObject;
-		}
+		getAndCreateLayerSetIfNotExistByURI(layerSetPath);
 		return 'success';
 	} catch (err) {
 		return err.description;
@@ -768,12 +780,7 @@ function renameBackgroundTo(newName) {
 
 function deleteArtLayerByURI(artLayerPath) {
 	try {
-		var pathArr = artLayerPath.split('/');
-		var nowObject = app.activeDocument;
-		for (var i = 0; i < pathArr.length - 1; i ++) {
-			nowObject = getLayerSetInLayerSet(nowObject, pathArr[i]);
-		}
-		getArtLayerInLayerSet(nowObject, pathArr[pathArr.length - 1]).remove();
+		getAndCreateArtLayerIfNotExistByURI(artLayerPath).remove();
 		return 'success';
 	} catch (err) {
 		return err.description;
@@ -782,12 +789,7 @@ function deleteArtLayerByURI(artLayerPath) {
 
 function deleteLayerSetByURI(layerSetPath) {
 	try {
-		var pathArr = layerSetPath.split('/');
-		var nowObject = app.activeDocument;
-		for (var i = 0; i < pathArr.length; i ++) {
-			nowObject = getLayerSetInLayerSet(nowObject, pathArr[i]);
-		}
-		nowObject.remove();
+		getAndCreateLayerSetIfNotExistByURI(layerSetPath).remove();
 		return 'success';
 	} catch (err) {
 		return err.description;
@@ -796,12 +798,7 @@ function deleteLayerSetByURI(layerSetPath) {
 
 function selectArtLayerByURI(artLayerPath) {
 	try {
-		var pathArr = artLayerPath.split('/');
-		var nowObject = app.activeDocument;
-		for (var i = 0; i < pathArr.length - 1; i ++) {
-			nowObject = getLayerSetInLayerSet(nowObject, pathArr[i]);
-		}
-		app.activeDocument.activeLayer = getArtLayerInLayerSet(nowObject, pathArr[pathArr.length - 1]);
+		app.activeDocument.activeLayer = getAndCreateArtLayerIfNotExistByURI(artLayerPath);
 		return 'success';
 	} catch (err) {
 		return err.description;
@@ -810,12 +807,39 @@ function selectArtLayerByURI(artLayerPath) {
 
 function selectLayerSetByURI(layerSetPath) {
 	try {
-		var pathArr = layerSetPath.split('/');
-		var nowObject = app.activeDocument;
-		for (var i = 0; i < pathArr.length; i ++) {
-			nowObject = getLayerSetInLayerSet(nowObject, pathArr[i]);
-		}
-		app.activeDocument.activeLayer = nowObject;
+		app.activeDocument.activeLayer = getAndCreateLayerSetIfNotExistByURI(layerSetPath);
+		return 'success';
+	} catch (err) {
+		return err.description;
+	}
+}
+
+// modified from: https://stackoverflow.com/questions/52827215/extendscript-with-photoshop-importing-an-image
+function importImage(fileName) {
+	function step1(fileName) {
+		var desc554 = new ActionDescriptor();
+		desc554.putPath(cTID('null'), new File(fileName));
+		desc554.putEnumerated(cTID('FTcs'), cTID('QCSt'), cTID('Qcsa'));
+		var desc555 = new ActionDescriptor();
+		desc555.putUnitDouble(cTID('Hrzn'), cTID('#Pxl'), 0.000000);
+		desc555.putUnitDouble(cTID('Vrtc'), cTID('#Pxl'), 0.000000);
+		desc554.putObject(cTID('Ofst'), cTID('Ofst'), desc555);
+		executeAction(cTID('Plc '), desc554, DialogModes.NO);
+	};
+	try {
+		step1(fileName);
+		return 'success';
+	} catch (err) {
+		return err.description;
+	}
+}
+
+function duplicateAndSelectArtLayerByURI(sourcePath, targetDir, targetName) {
+	try {
+		var newArtLayer = getAndCreateArtLayerIfNotExistByURI(sourcePath).
+			duplicate(getAndCreateLayerSetIfNotExistByURI(targetDir), ElementPlacement.INSIDE);
+		newArtLayer.name = targetName;
+		app.activeDocument.activeLayer = newArtLayer;
 		return 'success';
 	} catch (err) {
 		return err.description;
@@ -921,19 +945,21 @@ function performChannelSelection() {
 	}
 }
 
-function importImage(fileName) {
-	function step1(fileName) {
-		var desc554 = new ActionDescriptor();
-		desc554.putPath(cTID('null'), new File(fileName));
-		desc554.putEnumerated(cTID('FTcs'), cTID('QCSt'), cTID('Qcsa'));
-		var desc555 = new ActionDescriptor();
-		desc555.putUnitDouble(cTID('Hrzn'), cTID('#Pxl'), 0.000000);
-		desc555.putUnitDouble(cTID('Vrtc'), cTID('#Pxl'), 0.000000);
-		desc554.putObject(cTID('Ofst'), cTID('Ofst'), desc555);
-		executeAction(cTID('Plc '), desc554, DialogModes.NO);
-	};
+function performRgbChannelSelection() {
+	function step1(enabled, withDialog) {
+		if (enabled != undefined && !enabled) return;
+		var dialogMode = (withDialog ? DialogModes.ALL : DialogModes.NO);
+		var desc1 = new ActionDescriptor();
+		var ref1 = new ActionReference();
+		ref1.putProperty(cTID('Chnl'), sTID("selection"));
+		desc1.putReference(cTID('null'), ref1);
+		var ref2 = new ActionReference();
+		ref2.putEnumerated(cTID('Chnl'), cTID('Chnl'), sTID("RGB"));
+		desc1.putReference(cTID('T   '), ref2);
+		executeAction(sTID('set'), desc1, dialogMode);
+	}
 	try {
-		step1(fileName);
+		step1();
 		return 'success';
 	} catch (err) {
 		return err.description;
